@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Management - CarePlus Hospital</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Patient Management</h1>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="login.html">Logout</a>
+        </nav>
+    </header>
+
+    <main class="patient-management">
+        <!-- Patient Registration Form -->
+        <section class="registration-form">
+            <h2>Register New Patient</h2>
+            <form id="patientForm">
+                <input type="text" name="name" placeholder="Name" required>
+                <input type="number" name="age" placeholder="Age" required>
+                <select name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input type="text" name="contact" placeholder="Contact" required>
+                <input type="text" name="address" placeholder="Address" required>
+                <input type="text" name="emergency_contact" placeholder="Emergency Contact" required>
+                <input type="text" name="insurance" placeholder="Insurance Details" required>
+                <label>Upload Documents:</label>
+                <input type="file" name="documents" multiple>
+                <button type="submit">Register Patient</button>
+            </form>
+        </section>
+
+        <!-- Search Patients -->
+        <section class="search-patients">
+            <h2>Search Patients</h2>
+            <input type="text" id="searchInput" placeholder="Search by Name, ID, or Phone">
+            <button onclick="searchPatients()">Search</button>
+            <ul id="searchResults"></ul>
+        </section>
+
+        <!-- View Patient History -->
+        <section class="patient-history">
+            <h2>Patient History</h2>
+            <div id="patientHistory"></div>
+        </section>
+    </main>
+
+    <script>
+        // Simulated patient data for search functionality
+        const patients = [
+            { id: 'P001', name: 'John Doe', contact: '1234567890', history: 'Admitted: 2023-05-10 | Discharged: 2023-05-15 | Diagnosis: Flu' },
+            { id: 'P002', name: 'Jane Smith', contact: '0987654321', history: 'Admitted: 2024-01-01 | Discharged: 2024-01-05 | Diagnosis: Migraine' }
+        ];
+
+        // Handle patient registration
+        document.getElementById('patientForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent form submission
+            alert('Patient registered successfully!');
+            this.reset(); // Clear the form
+        });
+
+        // Search patients by name, ID, or phone
+        function searchPatients() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const results = patients.filter(patient =>
+                patient.name.toLowerCase().includes(searchInput) ||
+                patient.id.toLowerCase().includes(searchInput) ||
+                patient.contact.includes(searchInput)
+            );
+
+            const searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = ''; // Clear previous results
+
+            if (results.length > 0) {
+                results.forEach(patient => {
+                    const li = document.createElement('li');
+                    li.textContent = `${patient.name} (ID: ${patient.id}) - Contact: ${patient.contact}`;
+                    li.onclick = () => viewHistory(patient.history);
+                    searchResults.appendChild(li);
+                });
+            } else {
+                searchResults.innerHTML = '<li>No patients found.</li>';
+            }
+        }
+
+        // Display patient history
+        function viewHistory(history) {
+            const historyDiv = document.getElementById('patientHistory');
+            historyDiv.innerHTML = `<p>${history}</p>`;
+        }
+    </script>
+</body>
+</html>
